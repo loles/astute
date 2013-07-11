@@ -183,21 +183,11 @@ module Astute
           interfaces[name] = {'interface' => name, 'ipaddr' => []}
         end
         iface = interfaces[name]
-        if net['name'] == 'admin'
-          if iface['ipaddr'].size > 0
-            Astute.logger.error "Admin network interferes with openstack nets"
-          end
-          iface['ipaddr'] += ['dhcp']
-        else
-          if iface['ipaddr'].any?{|x| x == 'dhcp'}
-            Astute.logger.error "Admin network interferes with openstack nets"
-          end
-          if net['ip']
-            iface['ipaddr'] += [net['ip']]
-          end
-          if net['gateway'] && net['name'] =~ /^public$/i
-            iface['gateway'] = net['gateway']
-          end
+        if net['ip']
+          iface['ipaddr'] += [net['ip']]
+        end
+        if net['gateway'] && net['name'] =~ /^public$/i
+          iface['gateway'] = net['gateway']
         end
         Astute.logger.debug "Calculated network for interface: #{name}, data: #{iface.inspect}"
       end
