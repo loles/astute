@@ -40,7 +40,7 @@ module Astute
     end
 
     def attrs_singlenode(nodes, attrs)
-      ctrl_management_ip = nodes[0]['network_data'].select {|nd| nd['name'] == 'management'}[0]['ip']
+      ctrl_management_ip = nodes[0]['network_data'].select {|nd| nd['name'] == 'admin'}[0]['ip']
       ctrl_public_ip = nodes[0]['network_data'].select {|nd| nd['name'] == 'public'}[0]['ip']
       attrs['controller_node_address'] = ctrl_management_ip.split('/')[0]
       attrs['controller_node_public'] = ctrl_public_ip.split('/')[0]
@@ -61,7 +61,7 @@ module Astute
       ctrl_management_ips = []
       ctrl_public_ips = []
       ctrl_nodes.each do |n|
-        ctrl_management_ips << n['network_data'].select {|nd| nd['name'] == 'management'}[0]['ip']
+        ctrl_management_ips << n['network_data'].select {|nd| nd['name'] == 'admin'}[0]['ip']
         ctrl_public_ips << n['network_data'].select {|nd| nd['name'] == 'public'}[0]['ip']
       end
 
@@ -87,22 +87,22 @@ module Astute
         # current puppet modules require `hostname -s`
         hostname = n['fqdn'].split(/\./)[0]
         ctrl_manag_addrs.merge!({hostname =>
-                   n['network_data'].select {|nd| nd['name'] == 'management'}[0]['ip'].split(/\//)[0]})
+                   n['network_data'].select {|nd| nd['name'] == 'admin'}[0]['ip'].split(/\//)[0]})
         ctrl_public_addrs.merge!({hostname =>
                    n['network_data'].select {|nd| nd['name'] == 'public'}[0]['ip'].split(/\//)[0]})
         ctrl_storage_addrs.merge!({hostname =>
-                   n['network_data'].select {|nd| nd['name'] == 'storage'}[0]['ip'].split(/\//)[0]})
+                   n['network_data'].select {|nd| nd['name'] == 'admin'}[0]['ip'].split(/\//)[0]})
       end
 
       attrs['nodes'] = ctrl_nodes.map do |n|
         {
           'name'                 => n['fqdn'].split(/\./)[0],
           'role'                 => 'controller',
-          'internal_address'     => n['network_data'].select {|nd| nd['name'] == 'management'}[0]['ip'].split(/\//)[0],
+          'internal_address'     => n['network_data'].select {|nd| nd['name'] == 'admin'}[0]['ip'].split(/\//)[0],
           'public_address'       => n['network_data'].select {|nd| nd['name'] == 'public'}[0]['ip'].split(/\//)[0],
           'mountpoints'          => "1 1\n2 2",
           'zone'                 => n['id'],
-          'storage_local_net_ip' => n['network_data'].select {|nd| nd['name'] == 'storage'}[0]['ip'].split(/\//)[0],
+          'storage_local_net_ip' => n['network_data'].select {|nd| nd['name'] == 'admin'}[0]['ip'].split(/\//)[0],
         }
       end
       attrs['nodes'].first['role'] = 'primary-controller'

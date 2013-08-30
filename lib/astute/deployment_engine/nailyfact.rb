@@ -55,8 +55,11 @@ class Astute::DeploymentEngine::NailyFact < Astute::DeploymentEngine
       end
     end
 
+    metadata['storage_address'] = node_network_data.select {|nd| nd['name'] == 'admin'}[0]['ip'].split(/\//)[0]
+    metadata['storage_interface'] = node_network_data.select {|nd| nd['name'] == 'admin'}[0]['dev']
+
     # internal_address is required for HA..
-    metadata['internal_address'] = node['network_data'].select{|nd| nd['name'] == 'management' }[0]['ip'].split('/')[0]
+    metadata['internal_address'] = node['network_data'].select{|nd| nd['name'] == 'admin' }[0]['ip'].split('/')[0]
 
     if metadata['network_manager'] == 'VlanManager' && !metadata['fixed_interface']
       metadata['fixed_interface'] = get_fixed_interface(node)
