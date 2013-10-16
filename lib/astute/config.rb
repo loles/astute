@@ -59,6 +59,7 @@ module Astute
     conf[:MC_RETRIES] = 5                # MClient tries to call mcagent before failure
     conf[:MC_RETRY_INTERVAL] = 1         # MClient sleeps for ## sec between retries
     conf[:PUPPET_FADE_INTERVAL] = 1      # Retry every ## seconds to check puppet state if it was running
+    conf[:MAX_NODES_PER_CALL] = 50       # How many nodes to deploy in one puppet call
     return conf
   end
 end

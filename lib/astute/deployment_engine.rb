@@ -151,6 +151,7 @@ module Astute
       deploy_piece(quantum_nodes, attrs)
 
       Astute.logger.info "Starting deployment of other nodes"
+      other_nodes.each_slice(Astute.config[:MAX_NODES_PER_CALL]) {|part| deploy_piece(part, attrs)}
       deploy_piece(other_nodes, attrs)
       return
     end
